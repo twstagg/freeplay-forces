@@ -68,6 +68,16 @@ local _check_force_players_cutscene = function(force_players_converted)
     end
 end
 
+-- Function to create ff_systems if it does not already exist
+local _create_ff_systems = function()
+    -- Create force SE systems table in global if SE and it doesn't already exist
+    if remote.interfaces["space-exploration"] and not global.ff_systems then
+        -- Get the parent_name of the surface "nauvis" from SE universe
+        local parent_name = space_exploration.se_get_nauvis_parent_name()
+        global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
+    end
+end
+
 -- Function that is returned when the command /create-force is called
 local _create_force = function(cmd_event, cmd_player)
     -- This command is for admin only
@@ -646,6 +656,10 @@ local _spawn = function(cmd_event, cmd_player)
     cmd_player.teleport(safe_teleport_position or spawn_position, surface)
 end
 
+-- Create force SE systems table in global if it doesn't already exist
+-- on on_configuration_changed, and if SE is installed
+script.on_configuration_changed(function(event) _create_ff_systems() end)
+
 -- Support skipping cutscene
 local _on_cs_skip_cutscene = function(event)
     if not global.crash_site_cutscene_active then return end
@@ -671,14 +685,8 @@ script.on_event(defines.events.on_cutscene_cancelled, _on_cutscene_cancelled)
 
 -- Create force SE systems table in global if it doesn't already exist
 -- on the start of the scenario if SE is installed
-script.on_event(defines.events.on_game_created_from_scenario, function(event)
-    -- Create force SE systems table in global if SE and it doesn't already exist
-    if remote.interfaces["space-exploration"] and not global.ff_systems then
-        -- Get the parent_name of the surface "nauvis" from SE universe
-        local parent_name = space_exploration.se_get_nauvis_parent_name()
-        global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
-    end
-end)
+script.on_event(defines.events.on_game_created_from_scenario,
+                function(event) _create_ff_systems() end)
 
 -- Give additional items on startup if user preference
 script.on_init(function(e)

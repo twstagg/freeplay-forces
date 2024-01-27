@@ -20,7 +20,8 @@
         "__Profiler"
     ],
     "Lua.diagnostics.disable": [
-        "lowercase-global"
+        "lowercase-global",
+        "codestyle-check"
     ],
     "Lua.runtime.version": "Lua 5.2"
 }

@@ -169,20 +169,39 @@ local _create_force = function(cmd_event, cmd_player)
             local homeworld_without_forces =
                 space_exploration.se_setup_multiplayer_check(cmd_player,
                                                              global.ff_systems)
-            -- If we found a parent system without forces for re-use
-            if homeworld_without_forces then
-                space_exploration.se_setup_multiplayer_manually(cmd_player,
-                                                                force_name,
-                                                                force_players,
-                                                                force_players_converted,
-                                                                homeworld_without_forces)
-            else
-                -- Assume we're not tracking any existing worlds that have 
-                -- forces active
-                space_exploration.se_setup_multiplayer_test(cmd_player,
-                                                            force_name,
-                                                            force_players,
-                                                            force_players_converted)
+            local result, success = nil, nil
+            while not success do
+                success, result = pcall(function()
+                    -- If we found a parent system without forces for re-use
+                    if homeworld_without_forces then
+                        space_exploration.se_setup_multiplayer_manually(
+                            cmd_player, force_name, force_players,
+                            force_players_converted, homeworld_without_forces)
+                    else
+                        -- Assume we're not tracking any existing worlds that have
+                        -- forces active
+                        space_exploration.se_setup_multiplayer_test(cmd_player,
+                                                                    force_name,
+                                                                    force_players,
+                                                                    force_players_converted)
+                    end
+                end)
+                if not success and result ~= nil then
+                    -- Check if the error message matches the specific pattern
+                    local error_string = "Homeworld %((.-)%) has no surface"
+                    local problematic_surface =
+                        string.match(result, error_string)
+                    if problematic_surface then
+                        remote.call("space-exploration",
+                                    "zone_get_make_surface", {
+                            zone_index = remote.call("space-exploration",
+                                                     "get_zone_from_name", {
+                                zone_name = problematic_surface
+                            }).index
+                        })
+                        homeworld_without_forces = problematic_surface
+                    end
+                end
             end
             -- Define our new force
             local force = game.forces[force_name]

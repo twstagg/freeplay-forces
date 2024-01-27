@@ -1,8 +1,8 @@
 {
-  "name": "freeplay-forces",
-  "version": "1.0.0",
-  "factorio_version": "1.1",
-  "title": "Freeplay Forces",
-  "author": "twsta",
-  "description": "[Github repo](https://github.com/twstagg/head-start)\n\nAdds a command interface / startup options that enhance Freeplay scenario allowing players to have their own force, and start separately from the main spawn. If Space Exploration is installed, it use what is avaialble in the `remote.interfaces[\"space-exploration\"]`.\n\nThis mod also includes functionality from my other mod, [Head Start](https://mods.factorio.com/mod/head-start)."
+	"name": "freeplay-forces",
+	"version": "1.0.0",
+	"factorio_version": "1.1",
+	"title": "Freeplay Forces",
+	"author": "twsta",
+	"description": "[Github repo](https://github.com/twstagg/freeplay-forces)\n\nAdds a command interface / startup options that enhance Freeplay scenario allowing players to have their own force, and start separately from the main spawn. If Space Exploration is installed, it use what is avaialble in the `remote.interfaces[\"space-exploration\"]`.\n\nUse `/ff-commands` in-game to see all of the commands that this mod adds.\n\nThis mod also includes functionality from my other mod, [Head Start](https://mods.factorio.com/mod/head-start)."
 }

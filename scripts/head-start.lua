@@ -57,13 +57,13 @@ head_start.give_items = function()
             fp_created_items_buffer[item.name] = item.count
         end
     end
-    remote.call("freeplay", "set_created_items", fp_created_items_buffer)
     -- Add additional_respawn_items
     for _, item in pairs(additional_respawn_items) do
         if game.item_prototypes[item.name] then
             fp_created_items_buffer[item.name] = item.count
         end
     end
+    remote.call("freeplay", "set_created_items", fp_created_items_buffer)
     -- If startup preference is to also add respawn items, then add them
     if settings.startup["ff-respawn-items"].value then
         -- Give player additional respawn items

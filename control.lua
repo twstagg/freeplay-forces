@@ -664,15 +664,19 @@ end
 
 -- Function to safely teleport a player to their force's spawn position
 local _spawn = function(cmd_event, cmd_player)
-    -- Grab the force and surface from the player
-    local force_name = cmd_player.force.name
-    local surface = space_exploration.se_get_force_homeworld(global.ff_systems,
-                                                             force_name)
-    local spawn_position = game.forces[force_name].get_spawn_position(surface)
-    local safe_teleport_position = surface.find_non_colliding_position(
-                                       cmd_player.character.name,
-                                       spawn_position, 32, 1)
-    cmd_player.teleport(safe_teleport_position or spawn_position, surface)
+    -- Check if the player has a character
+    if cmd_player.character and cmd_player.character.name then
+        -- Grab the force and surface from the player
+        local force_name = cmd_player.force.name
+        local surface = space_exploration.se_get_force_homeworld(
+                            global.ff_systems, force_name)
+        local spawn_position = game.forces[force_name].get_spawn_position(
+                                   surface)
+        local safe_teleport_position = surface.find_non_colliding_position(
+                                           cmd_player.character.name,
+                                           spawn_position, 32, 1)
+        cmd_player.teleport(safe_teleport_position or spawn_position, surface)
+    end
 end
 
 -- Create force SE systems table in global if it doesn't already exist

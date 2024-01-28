@@ -83,8 +83,11 @@ end
 
 -- Function that is returned when the command /create-force is called
 local _create_force = function(cmd_event, cmd_player)
-    -- This command is for admin only
-    if not _check_admin(cmd_player, "create-force") then return end
+    -- This command is for Host/Server admin only, if you are allowed
+    -- to specify multiple players
+    if settings.startup["ff-allow-multiple-players-in-create"].value then
+        if not _check_admin(cmd_player, "create-force") then return end
+    end
     -- Process arguments from the event
     local args = _check_args(cmd_event)
     -- If args is false, or if ff-allow-multiple-players-in-create is true,

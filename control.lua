@@ -74,7 +74,10 @@ local _create_ff_systems = function()
     if remote.interfaces["space-exploration"] and not global.ff_systems then
         -- Get the parent_name of the surface "nauvis" from SE universe
         local parent_name = space_exploration.se_get_nauvis_parent_name()
-        global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
+        -- Ensure global.ff_systems is not empty
+        if not global.ff_systems or next(global.ff_systems) == nil then
+            global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
+        end
     end
 end
 

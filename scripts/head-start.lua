@@ -27,15 +27,21 @@ head_start.give_items = function()
     -- Define additional respawn items
     local additional_respawn_items = {
         -- Armor/weapons
-        {name = "light-armor", count = 1}, {name = "submachine-gun", count = 1}
+        {name = "submachine-gun", count = 1}
     }
     -- Adjust ammo if Krastorio2
     if not script.active_mods["Krastorio2"] then
-        table.insert(additional_created_items,
+        table.insert(additional_respawn_items,
                      {name = "piercing-rounds-magazine", count = 49})
     else
         table.insert(additional_respawn_items,
                      {name = "armor-piercing-rifle-magazine", count = 49})
+    end
+    -- Add light armor if Krastorio2 mod isn't loaded or if kr-bonus-items
+    -- setting isn't on
+    if not script.active_mods["Krastorio2"] or
+        not settings.startup["kr-bonus-items"].value then
+        table.insert(additional_respawn_items, {name = "light-armor", count = 1})
     end
     -- Give player additional created items
     local fp_car_removed_from_created_items = false

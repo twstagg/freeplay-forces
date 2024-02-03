@@ -10,6 +10,80 @@ functions.append_localized_string_to_log = function(message)
     game.write_file("freeplay-forces.log", "\n", true)
 end
 
+-- Function to validate if cmd issuer is admin
+functions.check_admin = function(cmd_player, name)
+    if cmd_player.admin then
+        return true
+    else
+        cmd_player.print({"cant-run-command-not-admin", name})
+        return false
+    end
+end
+
+-- Function to validate + parse command arguments
+functions.check_args = function(cmd_event)
+    local args = cmd_event.parameter
+    if not args then
+        return false
+    else
+        -- Separate the first space-separated argument from the rest of the 
+        -- arguments
+        local force_name, force_players = args:match("(%S+)%s*(.*)")
+        -- force_name is required at a minimum
+        if not force_name then
+            return false
+        else
+            -- Build a table of player names from the string of space-separated 
+            -- player names
+            local force_players_table = nil
+            if force_players then
+                force_players_table = {}
+                for player_name in force_players:gmatch("%S+") do
+                    table.insert(force_players_table, player_name)
+                end
+            end
+            local data = {force_name, force_players_table}
+            return data
+        end
+    end
+end
+
+-- Function to check if cmd_player is a force admin
+functions.check_force_admin = function(cmd_player)
+    local cmd_player_force_name = cmd_player.force.name
+    local cmd_player_force_admin = nil
+    if global.ff_admin[cmd_player_force_name] then
+        for admin_name, status in pairs(global.ff_admin[cmd_player_force_name]) do
+            if admin_name == cmd_player.name and status then
+                cmd_player_force_admin = status
+            end
+        end
+    end
+    return cmd_player_force_admin
+end
+
+-- Function to check if force players have cutscene
+functions.check_force_players_cutscene =
+    function(force_players_converted)
+        global.crash_site_cutscene_active = nil
+        for _, player in pairs(force_players_converted) do
+            if player.controller_type == defines.controllers.cutscene then
+                player.exit_cutscene()
+            end
+            if player.gui.screen.skip_cutscene_label then
+                player.gui.screen.skip_cutscene_label.destroy()
+            end
+        end
+    end
+
+-- Function to check if the player's "character" is valid
+functions.check_if_player_character = function(player)
+    if not player.character then return false end
+    if not player.character.name then return false end
+    if not player.character.valid then return false end
+    return true
+end
+
 -- Function to chart the starting area (straight up ripped from Vanilla freeplay.lua,
 -- with some adjustments)
 functions.chart_starting_area = function(force, surface)
@@ -389,24 +463,51 @@ functions.reproduce_crash_site = function(cmd_player, force_players_converted,
         global.custom_intro_message or {"msg-intro"})
 end
 
+-- Remove the player from the force
+functions.reset_player_force = function(player)
+    player.clear_console()
+    player.force = game.forces["player"]
+end
+
+-- Teleport the player back to Nauvis
+functions.return_player_to_nauvis = function(cmd_player, player)
+    local nauvis = game.surfaces[1]
+    local force_spawn_position = game.forces["player"]
+                                     .get_spawn_position(nauvis)
+    local safe_teleport_position = nauvis.find_non_colliding_position(
+                                       player.character.name,
+                                       force_spawn_position, 32, 1) or
+                                       force_spawn_position
+    player.teleport(safe_teleport_position, nauvis)
+    -- If a cmd_player was supplied, notify them of teleportation
+    if cmd_player then
+        local message = {
+            "message.tp-force-players", player.name, safe_teleport_position.x,
+            safe_teleport_position.y, nauvis.name
+        }
+        cmd_player.print(message)
+        functions.append_localized_string_to_log(message)
+    end
+end
+
 -- Function to return players to Nauvis
-functions.return_players_to_nauvis = function(force_players_converted)
+functions.return_players_to_nauvis = function(cmd_player,
+                                              force_players_converted)
     -- Spill the player' inventories
     functions.spill_player_inventories(force_players_converted)
-    -- Iterate over all the array of players
+    -- Iterate over all the array of players and validate + tp them to Nauvis
     for _, player in pairs(force_players_converted) do
-        -- Remove the player from the force
-        player.clear_console()
-        player.force = game.forces["player"]
-        -- Teleport the player back to Nauvis
-        local nauvis = game.surfaces[1]
-        local force_spawn_position = game.forces["player"].get_spawn_position(
-                                         nauvis)
-        local safe_teleport_position = nauvis.find_non_colliding_position(
-                                           player.character.name,
-                                           force_spawn_position, 32, 1) or
-                                           force_spawn_position
-        player.teleport(safe_teleport_position, nauvis)
+        if player.connected then
+            -- If the player is connected, teleport them back to Nauvis
+            functions.reset_player_force(player)
+            functions.return_player_to_nauvis(cmd_player, player)
+        else
+            -- If the player isn't connected, mark them to be teleported
+            -- back to Nauvis on next join
+            table.insert(global.ff_migrants, player.name)
+            local message = {"message.migrant-player-tracked", player.name}
+            if cmd_player then cmd_player.print(message) end
+        end
     end
 end
 

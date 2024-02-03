@@ -30,7 +30,8 @@ head_start.give_items = function()
         {name = "submachine-gun", count = 1}
     }
     -- Adjust ammo if Krastorio2
-    if not script.active_mods["Krastorio2"] then
+    local is_krastorio2 = script.active_mods["Krastorio2"]
+    if not is_krastorio2 then
         table.insert(additional_respawn_items,
                      {name = "piercing-rounds-magazine", count = 49})
     else
@@ -39,8 +40,7 @@ head_start.give_items = function()
     end
     -- Add light armor if Krastorio2 mod isn't loaded or if kr-bonus-items
     -- setting isn't on
-    if not script.active_mods["Krastorio2"] or
-        not settings.startup["kr-bonus-items"].value then
+    if not is_krastorio2 or not settings.startup["kr-bonus-items"].value then
         table.insert(additional_respawn_items, {name = "light-armor", count = 1})
     end
     -- Give player additional created items

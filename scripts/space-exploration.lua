@@ -114,8 +114,8 @@ space_exploration.se_setup_multiplayer_manually =
             game.create_force(force_name)
         end
         local message = {
-            "message.se-setup-multiplayer-manually", force_name, force_players,
-            homeworld_without_forces
+            "message.se-setup-multiplayer-manually", force_name,
+            table.concat(force_players, ", "), homeworld_without_forces
         }
         cmd_player.print(message)
         functions.append_localized_string_to_log(message)

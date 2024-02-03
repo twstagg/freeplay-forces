@@ -19,9 +19,19 @@
         "__DebugAdapter",
         "__Profiler"
     ],
+    "Lua.runtime.version": "Lua 5.2",
     "Lua.diagnostics.disable": [
-        "lowercase-global",
         "codestyle-check"
     ],
-    "Lua.runtime.version": "Lua 5.2"
+    "factorio.versions": [
+        {
+            "name": "Factorio (Steam)",
+            "factorioPath": "/home/tristin/.steam/debian-installation/steamapps/common/Factorio/bin/x64/factorio",
+            "active": true
+        }
+    ],
+    "Lua.workspace.library": [],
+    "Lua.workspace.userThirdParty": [
+        "/home/tristin/.config/VSCodium/User/workspaceStorage/48e07dacd48b0686a5edeb8e2f50af65/justarandomgeek.factoriomod-debug/sumneko-3rd"
+    ]
 }

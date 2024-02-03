@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024-02-03
+  Features:
+    - Further improvements to overall system stability and other minor adjustments have been made to enhance the user experience.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: 2024-01-31
   Bugfixes:

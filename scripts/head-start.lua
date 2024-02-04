@@ -94,8 +94,8 @@ head_start.give_items = function()
     --     end
     -- end
     -- If startup preference is to migrate the miner, then remove from ship items
-    if settings.startup["ff-mig-aai-miner"].value and
-        game.active_mods["aai-programmable-vehicles"] then
+    local is_aai_vehicles = script.active_mods["aai-vehicles-miner"]
+    if is_aai_vehicles and settings.startup["ff-mig-aai-miner"].value then
         -- Remove the key from the table if found, flag to be reinserted with the ship parts
         if fp_ship_items_buffer["vehicle-miner"] then
             fp_ship_items_buffer["vehicle-miner"] = nil
@@ -116,8 +116,8 @@ head_start.give_items = function()
         }
     end
     -- If startup preference is to migrate the miner, then add from to parts
-    if settings.startup["ff-mig-aai-miner"].value or
-        fp_vehicle_miner_removed_from_created_items then
+    if is_aai_vehicles and settings.startup["ff-mig-aai-miner"].value or
+        is_aai_vehicles and fp_vehicle_miner_removed_from_created_items then
         fp_ship_parts_buffer[#fp_ship_parts_buffer + 1] = {
             name = "vehicle-miner",
             repeat_count = 1,

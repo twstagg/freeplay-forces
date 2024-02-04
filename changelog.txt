@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024-02-04
+  Info:
+    - Update thumbnails
+  Bugfixes:
+    - AAI Miner detection, crash when mod not loaded
+    - crash when /create-force allow multiple players enabled
+---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2024-02-04
   Bugfixes:

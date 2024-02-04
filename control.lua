@@ -31,17 +31,14 @@ script.on_event(defines.events.on_cutscene_cancelled, _on_cutscene_cancelled)
 -- the bare minimum global.ff_* tables set up for the things we need to track
 script.on_configuration_changed(function()
     load.ff_fix_items()
-    load.head_start()
     load.tables()
 end)
 
 -- 1) Call initial head_start() setup for any additionally configured crash site items
 -- 2) Create force SE systems table in global if it doesn't already exist on the start
 -- of the scenario if SE is installed. We should always at least have Nauvis
-script.on_event(defines.events.on_game_created_from_scenario, function()
-    load.head_start()
-    load.tables()
-end)
+script.on_event(defines.events.on_game_created_from_scenario,
+                function() load.head_start() end)
 
 -- Teleport players who were removed from a force while offline back to nauvis when they
 -- reconnect to the server next
@@ -66,7 +63,6 @@ script.on_init(function()
     local message = {"message.on_init"}
     game.write_file("freeplay-forces.log", message, false)
     game.write_file("freeplay-forces.log", "\n", true)
-    load.head_start()
     load.tables()
 end)
 
@@ -181,5 +177,5 @@ for name, func in pairs(COMMANDS_LIST) do
     end)
 end
 -- Add /ff-fix-items as a workaround
--- commands.add_command("ff-fix-items", {"command-help.ff-fix-items"},
---                      function() load.ff_fix_items() end)
+commands.add_command("ff-fix-items", {"command-help.ff-fix-items"},
+                     function() load.ff_fix_items() end)

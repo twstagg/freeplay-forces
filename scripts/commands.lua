@@ -72,7 +72,7 @@ commands.create_force = function(cmd_event, cmd_player)
             if not force then
                 local message = {"message.game-create-force-failed", force_name}
                 cmd_player.print(message)
-                functions.append_localized_string_to_log(message)
+                log(message)
                 return
             end
             -- Add players to the newly created force
@@ -142,7 +142,7 @@ commands.create_force = function(cmd_event, cmd_player)
             if not force then
                 local message = {"message.se-create-force-failed", force_name}
                 cmd_player.print(message)
-                functions.append_localized_string_to_log(message)
+                log(message)
                 return
             end
             -- Retrieve the current surface of the force
@@ -177,7 +177,7 @@ commands.create_force = function(cmd_event, cmd_player)
         }
         local force = game.forces[force_name]
         force.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         -- Notify the entire game that a new force has been created
         local message = {
             "message.force-created", cmd_player.name, force_name,
@@ -185,7 +185,7 @@ commands.create_force = function(cmd_event, cmd_player)
             table.concat(force_players, ", ")
         }
         game.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
     else
         -- Otherwise, notify the issuing player that the force already exists
         local message = {"message.force-exists", force_name}
@@ -220,7 +220,7 @@ commands.demote_force = function(cmd_event, cmd_player)
             "message.force-demotion-failed", player_name, force_name
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- This command is for force admin only
@@ -243,7 +243,7 @@ commands.demote_force = function(cmd_event, cmd_player)
             "message.force-demotion-failed", player_name, force_name
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Remove the player from the force admin list if they are in it
@@ -257,7 +257,7 @@ commands.demote_force = function(cmd_event, cmd_player)
         "message.demoted-from-force-admin", player_name, force_name
     }
     force.print(message)
-    functions.append_localized_string_to_log(message)
+    log(message)
 end
 
 -- Function that is returned when the command /admins is called
@@ -314,7 +314,7 @@ commands.invite_force = function(cmd_event, cmd_player)
         game.get_player(player_name).force.name == force_name then
         local message = {"message.force-invite-failed", player_name, force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Add the player to the force's invite list if they are not already in it
@@ -332,7 +332,7 @@ commands.invite_force = function(cmd_event, cmd_player)
     }
     force.print(force_message)
     -- Notify the player that they have been invited to join the force
-    functions.append_localized_string_to_log(force_message)
+    log(force_message)
     local player = game.get_player(player_name)
     local player_message = {"message.invited-to-join-force", force_name}
     player.print(player_message)
@@ -361,7 +361,7 @@ commands.join_force = function(cmd_event, cmd_player)
         not global.ff_invites[force_name][player_name] then
         local message = {"message.force-join-failed", player_name, force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Spill the player's inventory
@@ -400,7 +400,7 @@ commands.join_force = function(cmd_event, cmd_player)
         "message.player-joined-force", player_name, force_name
     }
     force.print(force_message)
-    functions.append_localized_string_to_log(force_message)
+    log(force_message)
 end
 
 -- Function that is returned when the command /kick-force is called
@@ -428,7 +428,7 @@ commands.kick_force = function(cmd_event, cmd_player)
     if not player or is_force_admin then
         local message = {"message.force-kick-failed", player_name, force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- This command is for force admin only
@@ -448,7 +448,7 @@ commands.kick_force = function(cmd_event, cmd_player)
         force_name then
         local message = {"message.force-kick-failed", player_name, force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Remove the player from the force and return to Nauvis
@@ -459,7 +459,7 @@ commands.kick_force = function(cmd_event, cmd_player)
         "message.player-kicked-from-force", player_name, force_name
     }
     force.print(message)
-    functions.append_localized_string_to_log(message)
+    log(message)
     -- Notify the player that they have been kicked
     local player_message = {
         "message.player-kicked", force_name, cmd_player.name
@@ -489,7 +489,7 @@ commands.leave_force = function(cmd_event, cmd_player)
     if force_name == "player" or cmd_player.force.name ~= force_name then
         local message = {"message.cant-run-not-in-force", force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Remove the player from the force and return to Nauvis
@@ -501,7 +501,7 @@ commands.leave_force = function(cmd_event, cmd_player)
         "message.force-player-left-force", cmd_player.name, force_name
     }
     force.print(force_message)
-    functions.append_localized_string_to_log(force_message)
+    log(force_message)
     -- Notify the player that they have left the force
     local player_message = {"message.player-left-force", force_name}
     cmd_player.print(player_message)
@@ -543,7 +543,7 @@ commands.promote_force = function(cmd_event, cmd_player)
             "message.force-promotion-failed", player_name, force_name
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     -- Add the player to the force admin list if they are not already in it
@@ -554,7 +554,7 @@ commands.promote_force = function(cmd_event, cmd_player)
     -- Notify the force that they have been promoted to force admin
     local message = {"message.promoted-to-force-admin", player_name, force_name}
     force.print(message)
-    functions.append_localized_string_to_log(message)
+    log(message)
 end
 
 -- Function that is returned when the command /remove-force is called
@@ -566,7 +566,7 @@ commands.remove_force = function(cmd_event, cmd_player)
     if force_name == "player" then
         local message = {"message.force-removal-failed", force_name}
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         return
     end
     local force = game.forces[force_name]
@@ -617,7 +617,7 @@ commands.remove_force = function(cmd_event, cmd_player)
             -- Mark the force's homesystem as inactive for the force
             force_surface.clear()
             local message = {"message.se-planet-cleared", force_surface_name}
-            functions.append_localized_string_to_log(message)
+            log(message)
         end
     end
     -- Check for and remove force from the ff_admin table
@@ -627,7 +627,7 @@ commands.remove_force = function(cmd_event, cmd_player)
     -- Notify the entire game that a force has been removed
     local message = {"message.force-removed-game", force_name, cmd_player.name}
     game.print(message)
-    functions.append_localized_string_to_log(message)
+    log(message)
 end
 
 -- Function that is returned when the command /forces is called
@@ -707,7 +707,7 @@ commands.spawn = function(cmd_event, cmd_player)
             if not surface then
                 local message = {"message.se-surface-not-found", force_name}
                 cmd_player.print(message)
-                functions.append_localized_string_to_log(message)
+                log(message)
                 return
             end
         end

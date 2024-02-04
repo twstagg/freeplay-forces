@@ -61,11 +61,7 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 end)
 
 -- Log to file and setup on_init
-script.on_init(function()
-    local message = {"message.on_init"}
-    game.write_file("freeplay-forces.log", message, false)
-    game.write_file("freeplay-forces.log", "\n", true)
-end)
+script.on_init(function() log({"message.on_init"}) end)
 
 -- List of commands to be added to the game
 local COMMANDS_LIST = {
@@ -169,9 +165,7 @@ for name, func in pairs(COMMANDS_LIST) do
         -- Check for scenario
         if not remote.interfaces["freeplay"] then
             cmd_player.print("message.no-freeplay-scenario")
-            functions.append_localized_string_to_log({
-                "message.no-freeplay-scenario"
-            })
+            log({"message.no-freeplay-scenario"})
         else
             func(cmd_event, cmd_player)
         end

@@ -54,7 +54,7 @@ space_exploration.se_setup_multiplayer_check =
             for parent_name, used_zones in pairs(ff_systems) do
                 local message = {"message.se-checking-system", parent_name}
                 cmd_player.print(message)
-                functions.append_localized_string_to_log(message)
+                log(message)
                 -- Loop through the surfaces in the system
                 for surface_name, forces in pairs(used_zones) do
                     -- Check if any forces are actively assigned
@@ -64,14 +64,14 @@ space_exploration.se_setup_multiplayer_check =
                             table.concat(forces, ", "), surface_name
                         }
                         cmd_player.print(message)
-                        functions.append_localized_string_to_log(message)
+                        log(message)
                     else
                         local message = {
                             "message.se-system-has-no-active-forces",
                             parent_name, surface_name
                         }
                         cmd_player.print(message)
-                        functions.append_localized_string_to_log(message)
+                        log(message)
                         homeworld_without_forces = surface_name
                         break
                     end
@@ -100,7 +100,7 @@ space_exploration.se_setup_multiplayer_join =
             cmd_player.teleport(safe_teleport_position, surface)
         else
             local message = {"message.se-homeworld-not-found", force_name}
-            functions.append_localized_string_to_log(message)
+            log(message)
             return
         end
     end
@@ -118,7 +118,7 @@ space_exploration.se_setup_multiplayer_manually =
             table.concat(force_players, ", "), homeworld_without_forces
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         remote.call("space-exploration", "set_force_homeworld", {
             zone_name = homeworld_without_forces,
             force_name = force_name,
@@ -142,7 +142,7 @@ space_exploration.se_setup_multiplayer_test =
             table.concat(force_players, ", ")
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
         remote.call("space-exploration", "setup_multiplayer_test", {
             force_name = force_name,
             players = force_players_converted,
@@ -177,7 +177,7 @@ space_exploration.se_toggle_force_active =
                             force_surface_name, parent_name
                         }
                         game.print(message)
-                        functions.append_localized_string_to_log(message)
+                        log(message)
                         table.insert(
                             global.ff_systems[parent_name][force_surface_name],
                             force_name)
@@ -187,7 +187,7 @@ space_exploration.se_toggle_force_active =
                             force_surface_name, parent_name
                         }
                         game.print(message)
-                        functions.append_localized_string_to_log(message)
+                        log(message)
                         -- Remove the force from the array of active forces 
                         -- in the zone if it exists
                         for index, active_force in pairs(

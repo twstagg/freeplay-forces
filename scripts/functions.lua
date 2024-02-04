@@ -4,12 +4,6 @@ local util = require("util")
 
 local functions = {}
 
--- Function to append lines to log file (path is scripts-output/freeplay-forces.log)
-functions.append_localized_string_to_log = function(message)
-    game.write_file("freeplay-forces.log", message, true)
-    game.write_file("freeplay-forces.log", "\n", true)
-end
-
 -- Function to validate if cmd issuer is admin
 functions.check_admin = function(cmd_player, name)
     if cmd_player.admin then
@@ -105,7 +99,7 @@ functions.clear_cliffs = function(position, surface)
         -- Destroy the cliff
         cliff.destroy()
     end
-    functions.append_localized_string_to_log({
+    log({
         "message.cliffs-cleared", r, position.x .. ", " .. position.y,
         surface.name
     })
@@ -126,7 +120,7 @@ functions.clear_hostiles = function(position, surface)
         -- Destroy the enemy
         enemy.destroy()
     end
-    functions.append_localized_string_to_log({
+    log({
         "message.hostiles-cleared", r, position.x .. ", " .. position.y,
         surface.name
     })
@@ -236,7 +230,7 @@ functions.ensure_ore_spawn = function(position, radius, surface)
                 "message.spawning-ore", ore_name, amount,
                 spawn_position.x .. ", " .. spawn_position.y, surface.name
             }
-            functions.append_localized_string_to_log(message)
+            log(message)
         end
     end
 end
@@ -299,7 +293,7 @@ functions.find_suitable_location = function(cmd_player, surface, range,
         if is_suitable_position(position) then
             -- Return the position if it is suitable
             cmd_player.print(success_message)
-            functions.append_localized_string_to_log(success_message)
+            log(success_message)
             -- Clear any cliffs if specified
             if clear_cliffs then
                 functions.clear_cliffs(position, surface)
@@ -315,7 +309,7 @@ functions.find_suitable_location = function(cmd_player, surface, range,
             end
             return position
         else
-            functions.append_localized_string_to_log(fail_message)
+            log(fail_message)
             -- Delete the chunk if it is not suitable
             surface.delete_chunk(position)
         end
@@ -348,7 +342,7 @@ functions.free_chunks_for_force = function(cmd_player, surface, force)
                     "message.removed-force-chunk", force.name, chunk.x, chunk.y
                 }
                 cmd_player.print(message)
-                functions.append_localized_string_to_log(message)
+                log(message)
             end
         end
     end
@@ -370,7 +364,7 @@ functions.notify_all_force_admins = function(ff_admin, force, message)
                 force_admin.print(message)
             end
         end
-        functions.append_localized_string_to_log(message)
+        log(message)
     end
 end
 
@@ -425,7 +419,7 @@ functions.reproduce_crash_site = function(cmd_player, force_players_converted,
                 force_surface.name
             }
             cmd_player.print(message)
-            functions.append_localized_string_to_log(message)
+            log(message)
         end
     end
     -- Merge the keys from the 4 dictionaries above which start with "fp_" into
@@ -486,7 +480,7 @@ functions.return_player_to_nauvis = function(cmd_player, player)
             safe_teleport_position.y, nauvis.name
         }
         cmd_player.print(message)
-        functions.append_localized_string_to_log(message)
+        log(message)
     end
 end
 

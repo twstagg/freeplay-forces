@@ -18,7 +18,7 @@ commands.create_force = function(cmd_event, cmd_player)
     local args = functions.check_args(cmd_event)
     -- If args is false, or if ff-allow-multiple-players-in-create is true,
     -- and the 2nd element of args isn't nil
-    if not args or
+    if args == nil or
         (settings.startup["ff-allow-multiple-players-in-create"].value and
             args[2] == nil) then
         local parameter = cmd_event.parameter

@@ -18,14 +18,17 @@ end
 functions.check_args = function(cmd_event)
     local args = cmd_event.parameter
     if not args then
-        return false
+        return nil
     else
         -- Separate the first space-separated argument from the rest of the 
         -- arguments
         local force_name, force_players = args:match("(%S+)%s*(.*)")
         -- force_name is required at a minimum
-        if not force_name then
-            return false
+        if not force_name or force_name == "" then
+            return nil
+        elseif settings.startup["ff-allow-multiple-players-in-create"].value and
+            not force_players or force_players == "" then
+            return {force_name, nil}
         else
             -- Build a table of player names from the string of space-separated 
             -- player names

@@ -11,14 +11,16 @@ load.ff_fix_items = function()
     local fp_respawn_items_buffer = remote.call("freeplay", "get_respawn_items")
     if not is_krastorio2 then
         for name, _ in pairs(fp_created_items_buffer) do
-            if name == "armor-piercing-rounds-magazine" then
+            if name == "armor-piercing-rifle-magazine" then
                 fp_created_items_buffer[name] = nil
+                fp_created_items_buffer["piercing-rounds-magazine"] = 49
             end
         end
     else
         for name, _ in pairs(fp_created_items_buffer) do
             if name == "piercing-rounds-magazine" then
                 fp_created_items_buffer[name] = nil
+                fp_created_items_buffer["armor-piercing-rifle-magazine"] = 49
             end
         end
     end
@@ -26,14 +28,16 @@ load.ff_fix_items = function()
     -- buffer and remove the inverse ammunition from the buffer and set it again
     if not is_krastorio2 then
         for name, _ in pairs(fp_respawn_items_buffer) do
-            if name == "armor-piercing-rounds-magazine" then
+            if name == "armor-piercing-rifle-magazine" then
                 fp_respawn_items_buffer[name] = nil
+                fp_respawn_items_buffer["piercing-rounds-magazine"] = 49
             end
         end
     else
         for name, _ in pairs(fp_respawn_items_buffer) do
             if name == "piercing-rounds-magazine" then
                 fp_respawn_items_buffer[name] = nil
+                fp_respawn_items_buffer["armor-piercing-rifle-magazine"] = 49
             end
         end
     end
@@ -49,6 +53,10 @@ load.ff_fix_items = function()
                 fp_respawn_items_buffer[name] = nil
             end
         end
+    else
+        -- Add light armor if not Krastorio2
+        fp_created_items_buffer["light-armor"] = 1
+        fp_respawn_items_buffer["light-armor"] = 1
     end
     remote.call("freeplay", "set_created_items", fp_created_items_buffer)
     remote.call("freeplay", "set_respawn_items", fp_respawn_items_buffer)

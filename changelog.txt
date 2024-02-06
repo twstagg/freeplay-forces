@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2024-02-06
+  Bugfixes:
+    - change default settings
+    - global.ff_systems can be empty if all else fails
+    - on force removal, only "neutralize" removed force entities if not ff-delete-chunks-remove-force
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2024-02-06
   Bugfixes:

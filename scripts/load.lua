@@ -82,7 +82,11 @@ load.tables = function()
         local parent_name = space_exploration.se_get_nauvis_parent_name()
         -- Ensure global.ff_systems is not empty
         if not global.ff_systems or next(global.ff_systems) == nil then
-            global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
+            -- Create force SE systems table in global if it doesn't already exist
+            global.ff_systems = {}
+            if parent_name and parent_name ~= "" then
+                global.ff_systems = {[parent_name] = {["nauvis"] = {"player"}}}
+            end
         end
     end
 end

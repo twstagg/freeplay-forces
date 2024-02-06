@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2024-02-06
+  Bugfixes:
+    - Remove 2 startup options to migrate vehicles. This is now default behavior, separate from Head Start
+---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2024-02-06
   Bugfixes:

@@ -39,27 +39,15 @@ data:extend({
         order = "a6"
     }, {
         type = "bool-setting",
-        name = "ff-mig-aai-miner",
+        name = "ff-spawn-car",
         setting_type = "startup",
         default_value = true,
         order = "a7"
     }, {
         type = "bool-setting",
-        name = "ff-mig-car",
-        setting_type = "startup",
-        default_value = true,
-        order = "a8"
-    }, {
-        type = "bool-setting",
-        name = "ff-spawn-car",
-        setting_type = "startup",
-        default_value = true,
-        order = "a9"
-    }, {
-        type = "bool-setting",
         name = "ff-respawn-items",
         setting_type = "startup",
         default_value = true,
-        order = "a10"
+        order = "a8"
     }
 })

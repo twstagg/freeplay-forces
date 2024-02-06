@@ -44,19 +44,7 @@ head_start.give_items = function()
         table.insert(additional_respawn_items, {name = "light-armor", count = 1})
     end
     -- Give player additional created items
-    local fp_car_removed_from_created_items = false
-    local fp_vehicle_miner_removed_from_created_items = false
     local fp_created_items_buffer = remote.call("freeplay", "get_created_items")
-    -- If startup preference is to spawn the car, then check if created_items already has one,
-    -- because some mods add the car to created_items
-    if settings.startup["ff-spawn-car"].value or
-        settings.startup["ff-mig-car"].value then
-        -- Remove the key from the table if found, flag to be reinserted with the ship parts
-        if fp_created_items_buffer["car"] then
-            fp_created_items_buffer["car"] = nil
-            fp_car_removed_from_created_items = true
-        end
-    end
     -- Add additional_created_items
     for _, item in pairs(additional_created_items) do
         if game.item_prototypes[item.name] then
@@ -87,20 +75,40 @@ head_start.give_items = function()
 
     -- }
     -- Give ship some additional starting items
-    local fp_ship_items_buffer = remote.call("freeplay", "get_ship_items")
+    -- local fp_ship_items_buffer = remote.call("freeplay", "get_ship_items")
     -- for _, item in pairs(additional_ship_items) do
     --     if game.item_prototypes[item.name] then
     --         fp_ship_items_buffer[item.name] = item.count
     --     end
     -- end
+    -- remote.call("freeplay", "set_ship_items", fp_ship_items_buffer)
+    -- Add additional ship parts
+    -- local fp_ship_parts_buffer = remote.call("freeplay", "get_ship_parts")
+    -- remote.call("freeplay", "set_ship_parts", fp_ship_parts_buffer)
+    -- Shuffle car/miner vehicles if found
+    head_start.shuffle()
+end
+
+-- Function to perform any shuffling desired during the Freeplay scenario init
+function head_start.shuffle()
+    -- If startup preference is to spawn the car, then check if created_items already has one,
+    -- because some mods add the car to created_items
+    local fp_car_removed_from_created_items = false
+    local fp_vehicle_miner_removed_from_created_items = false
+    local fp_created_items_buffer = remote.call("freeplay", "get_created_items")
+    -- Remove the key from the table if found, flag to be reinserted with the ship parts
+    if fp_created_items_buffer["car"] then
+        fp_created_items_buffer["car"] = nil
+        fp_car_removed_from_created_items = true
+    end
+    remote.call("freeplay", "set_created_items", fp_created_items_buffer)
     -- If startup preference is to migrate the miner, then remove from ship items
+    local fp_ship_items_buffer = remote.call("freeplay", "get_ship_items")
+    -- Remove the key from the table if found, flag to be reinserted with the ship parts
     local is_aai_vehicles = script.active_mods["aai-vehicles-miner"]
-    if is_aai_vehicles and settings.startup["ff-mig-aai-miner"].value then
-        -- Remove the key from the table if found, flag to be reinserted with the ship parts
-        if fp_ship_items_buffer["vehicle-miner"] then
-            fp_ship_items_buffer["vehicle-miner"] = nil
-            fp_vehicle_miner_removed_from_created_items = true
-        end
+    if is_aai_vehicles and fp_ship_items_buffer["vehicle-miner"] then
+        fp_ship_items_buffer["vehicle-miner"] = nil
+        fp_vehicle_miner_removed_from_created_items = true
     end
     remote.call("freeplay", "set_ship_items", fp_ship_items_buffer)
     -- Add additional ship parts
@@ -116,8 +124,7 @@ head_start.give_items = function()
         }
     end
     -- If startup preference is to migrate the miner, then add from to parts
-    if is_aai_vehicles and settings.startup["ff-mig-aai-miner"].value or
-        is_aai_vehicles and fp_vehicle_miner_removed_from_created_items then
+    if is_aai_vehicles and fp_vehicle_miner_removed_from_created_items then
         fp_ship_parts_buffer[#fp_ship_parts_buffer + 1] = {
             name = "vehicle-miner",
             repeat_count = 1,

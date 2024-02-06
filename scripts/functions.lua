@@ -281,7 +281,7 @@ functions.find_suitable_location = function(cmd_player, surface, range,
     end
 
     -- Attempt to find a suitable location (max tries = attempts)
-    for i = 1, attempts do
+    for i = 1, attempts or 100 do
         local position = functions.create_random_coordinates(range)
         -- Request and force generate chunks
         surface.request_to_generate_chunks(position, 7)

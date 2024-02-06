@@ -60,7 +60,7 @@ commands.create_force = function(cmd_event, cmd_player)
             local nauvis = game.surfaces[1]
             -- Generate coordinates within a range of 2500 from 0,0
             local safe_crash_position = functions.find_suitable_location(
-                                            cmd_player, nauvis, 1250, 10, true,
+                                            cmd_player, nauvis, 1250, nil, true,
                                             true, true)
             -- Spill the items of all players in the force
             functions.spill_player_inventories(force_players_converted)
@@ -157,7 +157,7 @@ commands.create_force = function(cmd_event, cmd_player)
             -- Generate coordinates within a range of 10 from 0,0 (or 0,0 if
             -- we run out of attempts)
             local safe_crash_position = functions.find_suitable_location(
-                                            cmd_player, force_surface, 32, 10,
+                                            cmd_player, force_surface, 32, nil,
                                             true, true, true)
             -- Recreate crash site at the force's current position
             functions.reproduce_crash_site(cmd_player, force_players_converted,

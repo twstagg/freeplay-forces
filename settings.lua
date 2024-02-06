@@ -17,13 +17,13 @@ data:extend({
         type = "bool-setting",
         name = "ff-delete-chunks-remove-force",
         setting_type = "startup",
-        default_value = false,
+        default_value = true,
         order = "a3"
     }, {
         type = "bool-setting",
         name = "ff-ensure-ore-spawn",
         setting_type = "startup",
-        default_value = false,
+        default_value = true,
         order = "a4"
     }, {
         type = "bool-setting",

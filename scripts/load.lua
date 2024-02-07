@@ -4,62 +4,69 @@ local space_exploration = require("scripts.space-exploration")
 local load = {}
 
 load.ff_fix_items = function()
-    -- If Krastorio2 is enabled & active, then loop through the buffer and
-    -- remove the inverse ammunition from the buffer and set it again
-    local is_krastorio2 = script.active_mods["Krastorio2"]
-    local fp_created_items_buffer = remote.call("freeplay", "get_created_items")
-    local fp_respawn_items_buffer = remote.call("freeplay", "get_respawn_items")
-    if not is_krastorio2 then
-        for name, _ in pairs(fp_created_items_buffer) do
-            if name == "armor-piercing-rifle-magazine" then
-                fp_created_items_buffer[name] = nil
-                fp_created_items_buffer["piercing-rounds-magazine"] = 49
+    -- Check if Head Start is enabled
+    if settings.startup["ff-give-head-start"].value then
+        -- If Krastorio2 is enabled & active, then loop through the buffer and
+        -- remove the inverse ammunition from the buffer and set it again
+        local is_krastorio2 = script.active_mods["Krastorio2"]
+        local fp_created_items_buffer = remote.call("freeplay",
+                                                    "get_created_items")
+        local fp_respawn_items_buffer = remote.call("freeplay",
+                                                    "get_respawn_items")
+        if not is_krastorio2 then
+            for name, _ in pairs(fp_created_items_buffer) do
+                if name == "armor-piercing-rifle-magazine" then
+                    fp_created_items_buffer[name] = nil
+                    fp_created_items_buffer["piercing-rounds-magazine"] = 49
+                end
+            end
+        else
+            for name, _ in pairs(fp_created_items_buffer) do
+                if name == "piercing-rounds-magazine" then
+                    fp_created_items_buffer[name] = nil
+                    fp_created_items_buffer["armor-piercing-rifle-magazine"] =
+                        49
+                end
             end
         end
-    else
-        for name, _ in pairs(fp_created_items_buffer) do
-            if name == "piercing-rounds-magazine" then
-                fp_created_items_buffer[name] = nil
-                fp_created_items_buffer["armor-piercing-rifle-magazine"] = 49
+        -- If Krastorio2 is enabled & active, then loop through the respawn items
+        -- buffer and remove the inverse ammunition from the buffer and set it again
+        if not is_krastorio2 then
+            for name, _ in pairs(fp_respawn_items_buffer) do
+                if name == "armor-piercing-rifle-magazine" then
+                    fp_respawn_items_buffer[name] = nil
+                    fp_respawn_items_buffer["piercing-rounds-magazine"] = 49
+                end
+            end
+        else
+            for name, _ in pairs(fp_respawn_items_buffer) do
+                if name == "piercing-rounds-magazine" then
+                    fp_respawn_items_buffer[name] = nil
+                    fp_respawn_items_buffer["armor-piercing-rifle-magazine"] =
+                        49
+                end
             end
         end
+        -- Remove light armor if it exists in the buffer
+        if is_krastorio2 and settings.startup["kr-bonus-items"].value then
+            for name, _ in pairs(fp_created_items_buffer) do
+                if name == "light-armor" then
+                    fp_created_items_buffer[name] = nil
+                end
+            end
+            for name, _ in pairs(fp_respawn_items_buffer) do
+                if name == "light-armor" then
+                    fp_respawn_items_buffer[name] = nil
+                end
+            end
+        else
+            -- Add light armor if not Krastorio2
+            fp_created_items_buffer["light-armor"] = 1
+            fp_respawn_items_buffer["light-armor"] = 1
+        end
+        remote.call("freeplay", "set_created_items", fp_created_items_buffer)
+        remote.call("freeplay", "set_respawn_items", fp_respawn_items_buffer)
     end
-    -- If Krastorio2 is enabled & active, then loop through the respawn items
-    -- buffer and remove the inverse ammunition from the buffer and set it again
-    if not is_krastorio2 then
-        for name, _ in pairs(fp_respawn_items_buffer) do
-            if name == "armor-piercing-rifle-magazine" then
-                fp_respawn_items_buffer[name] = nil
-                fp_respawn_items_buffer["piercing-rounds-magazine"] = 49
-            end
-        end
-    else
-        for name, _ in pairs(fp_respawn_items_buffer) do
-            if name == "piercing-rounds-magazine" then
-                fp_respawn_items_buffer[name] = nil
-                fp_respawn_items_buffer["armor-piercing-rifle-magazine"] = 49
-            end
-        end
-    end
-    -- Remove light armor if it exists in the buffer
-    if is_krastorio2 and settings.startup["kr-bonus-items"].value then
-        for name, _ in pairs(fp_created_items_buffer) do
-            if name == "light-armor" then
-                fp_created_items_buffer[name] = nil
-            end
-        end
-        for name, _ in pairs(fp_respawn_items_buffer) do
-            if name == "light-armor" then
-                fp_respawn_items_buffer[name] = nil
-            end
-        end
-    else
-        -- Add light armor if not Krastorio2
-        fp_created_items_buffer["light-armor"] = 1
-        fp_respawn_items_buffer["light-armor"] = 1
-    end
-    remote.call("freeplay", "set_created_items", fp_created_items_buffer)
-    remote.call("freeplay", "set_respawn_items", fp_respawn_items_buffer)
 end
 
 load.head_start = function()

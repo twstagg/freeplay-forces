@@ -67,6 +67,7 @@ load.head_start = function()
     if settings.startup["ff-give-head-start"].value then
         head_start.give_items()
     end
+    head_start.shuffle()
 end
 
 load.tables = function()

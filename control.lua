@@ -37,10 +37,8 @@ end)
 -- 1) Call initial head_start() setup for any additionally configured crash site items
 -- 2) Create force SE systems table in global if it doesn't already exist on the start
 -- of the scenario if SE is installed. We should always at least have Nauvis
-script.on_event(defines.events.on_game_created_from_scenario, function()
-    load.head_start()
-    load.tables()
-end)
+script.on_event(defines.events.on_game_created_from_scenario,
+                function() load.tables() end)
 
 -- Teleport players who were removed from a force while offline back to nauvis when they
 -- reconnect to the server next
@@ -62,7 +60,10 @@ script.on_event(defines.events.on_player_joined_game, function(event)
 end)
 
 -- Log to file and setup on_init
-script.on_init(function() log({"message.on_init"}) end)
+script.on_init(function()
+    log({"message.on_init"})
+    load.head_start()
+end)
 
 -- List of commands to be added to the game
 local COMMANDS_LIST = {

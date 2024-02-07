@@ -85,7 +85,6 @@ head_start.give_items = function()
     -- Add additional ship parts
     -- local fp_ship_parts_buffer = remote.call("freeplay", "get_ship_parts")
     -- remote.call("freeplay", "set_ship_parts", fp_ship_parts_buffer)
-    -- Shuffle car/miner vehicles if found
 end
 
 -- Function to perform any shuffling desired during the Freeplay scenario init

@@ -74,6 +74,7 @@ load.head_start = function()
     if settings.startup["ff-give-head-start"].value then
         head_start.give_items()
     end
+    -- Shuffle car/miner vehicles if found
     head_start.shuffle()
 end
 

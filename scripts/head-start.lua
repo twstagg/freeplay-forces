@@ -8,21 +8,23 @@ head_start.give_items = function()
     -- Define additional created items
     local additional_created_items = {
         -- Logistics
-        {name = "transport-belt", count = 400},
-        {name = "underground-belt", count = 200},
-        {name = "splitter", count = 25}, {name = "pipe-to-ground", count = 25},
-        {name = "pipe", count = 50}, {name = "inserter", count = 50},
+        {name = "transport-belt", count = 200},
+        {name = "underground-belt", count = 100},
+        {name = "splitter", count = 10}, {name = "pipe-to-ground", count = 10},
+        {name = "pipe", count = 25}, {name = "inserter", count = 48},
+        {name = "long-handed-inserter", count = 48},
         {name = "iron-chest", count = 25}, -- Materials
         {name = "coal", count = 100}, {name = "iron-plate", count = 250},
         {name = "copper-plate", count = 150},
         {name = "iron-gear-wheel", count = 50},
         {name = "electronic-circuit", count = 75}, -- Production
-        {name = "stone-furnace", count = 50},
-        {name = "assembling-machine-1", count = 25},
+        {name = "stone-furnace", count = 48},
+        {name = "assembling-machine-1", count = 20},
         {name = "electric-mining-drill", count = 50}, -- Utilities
+        {name = "small-electric-pole", count = 100},
         {name = "medium-electric-pole", count = 50},
-        {name = "big-electric-pole", count = 25}, {name = "boiler", count = 10},
-        {name = "steam-engine", count = 20}, {name = "offshore-pump", count = 1}
+        {name = "big-electric-pole", count = 25}, {name = "boiler", count = 5},
+        {name = "steam-engine", count = 10}, {name = "offshore-pump", count = 1}
     }
     -- Define additional respawn items
     local additional_respawn_items = {
